@@ -4,8 +4,12 @@
       const media = hero.querySelector('.editorial-hero__media');
       const copy = hero.querySelector('.editorial-hero__copy');
       if (!media || !copy) return;
-      copy.querySelectorAll(':scope > .editorial-hero__seal, :scope > .editorial-hero__product-disclosure').forEach((overlay) => {
-        media.appendChild(overlay);
+      // Theme blocks are rendered into the copy column by `content_for`.
+      // Relocate the overlay blocks into the media column so their absolute
+      // positioning is always scoped to the image (including Theme Editor
+      // re-renders where Shopify may add a block wrapper).
+      copy.querySelectorAll('.editorial-hero__seal, .editorial-hero__product-disclosure').forEach((overlay) => {
+        if (overlay.parentElement !== media) media.appendChild(overlay);
       });
     });
   };
