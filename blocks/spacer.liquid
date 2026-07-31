@@ -1,0 +1,30 @@
+{% assign spacer_unit = block.settings.unit | default: 'px' %}
+{% if spacer_unit == '%' %}{% assign spacer_unit = 'percent' %}{% endif %}
+<div
+  class="spacer spacer--{{ spacer_unit }}"
+  style="--spacer-value-desktop: {{ block.settings.height_desktop }}; --spacer-value-mobile: {{ block.settings.height_mobile }};"
+  aria-hidden="true"
+  {{ block.shopify_attributes }}
+></div>
+
+{% stylesheet %}
+  .spacer { display: block; flex: 0 0 auto; }
+  .spacer--px { height: calc(var(--spacer-value-desktop) * 1px); }
+  .spacer--percent { height: 0; padding-block-start: calc(var(--spacer-value-desktop) * 1%); }
+  @media (max-width: 749px) {
+    .spacer--px { height: calc(var(--spacer-value-mobile) * 1px); }
+    .spacer--percent { padding-block-start: calc(var(--spacer-value-mobile) * 1%); }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Spacer",
+  "settings": [
+    { "type": "number", "id": "height_desktop", "label": "Desktop spacing", "default": 16 },
+    { "type": "number", "id": "height_mobile", "label": "Mobile spacing", "default": 12 },
+    { "type": "select", "id": "unit", "label": "Unit", "options": [{ "value": "px", "label": "Pixels (px)" }, { "value": "percent", "label": "Percent (%)" }], "default": "px" }
+  ],
+  "presets": [{ "name": "Spacer" }]
+}
+{% endschema %}

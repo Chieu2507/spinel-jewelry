@@ -1,0 +1,94 @@
+{% assign cart_drawer_scheme = 'scheme-1' %}
+<cart-drawer
+  id="CartDrawer"
+  class="cart-drawer color-scheme color-{{ cart_drawer_scheme }}"
+  scroll-lock
+  data-cart-drawer
+  style="--cart-drawer-width: 450px;"
+  data-currency="{{ cart.currency.iso_code | default: shop.currency }}"
+  data-cart-update-url="{{ routes.cart_update_url }}.js"
+  data-recommendations-enabled="true"
+  data-recommendations-limit="4"
+  data-discount-enabled="true"
+  data-order-note-enabled="true"
+  data-empty-label="{{ 'cart_drawer.empty' | t | default: 'Your cart is empty' | escape }}"
+  data-decrease-quantity-label="{{ 'quantity.decrease' | t | escape }}"
+  data-increase-quantity-label="{{ 'quantity.increase' | t | escape }}"
+  data-related-product-label="{{ 'cart_drawer.related_product' | t: index: '__index__' | escape }}"
+  data-remove-label="{{ 'cart_drawer.remove' | t | escape }}"
+  data-add-to-cart-label="{{ 'cart_drawer.add_to_cart' | t | escape }}"
+  data-choose-options-label="{{ 'product_card.choose_options' | t | escape }}"
+  data-adding-label="{{ 'cart_drawer.adding' | t | escape }}"
+  data-updating-label="{{ 'cart_drawer.updating' | t | escape }}"
+  data-applying-discount-label="{{ 'cart_drawer.applying_discount' | t | escape }}"
+  data-discount-applied-label="{{ 'cart_drawer.discount_applied' | t | escape }}"
+  data-saving-note-label="{{ 'cart_drawer.saving_note' | t | escape }}"
+  data-note-saved-label="{{ 'cart_drawer.note_saved' | t | escape }}"
+  data-cart-unavailable-label="{{ 'cart_drawer.cart_unavailable' | t | escape }}"
+  data-cart-update-error-label="{{ 'cart_drawer.cart_update_error' | t | escape }}"
+  data-related-product-error-label="{{ 'cart_drawer.related_product_error' | t | escape }}"
+  data-discount-error-label="{{ 'cart_drawer.discount_error' | t | escape }}"
+  data-note-error-label="{{ 'cart_drawer.note_error' | t | escape }}"
+  data-unit-price-label="{{ 'cart.unit_price' | t | escape }}"
+  data-taxes-included-label="{{ 'cart.taxes_included' | t | escape }}"
+  data-taxes-note-label="{{ 'cart_drawer.taxes_note' | t | escape }}"
+  hidden
+>
+  <button class="cart-drawer__backdrop modal-backdrop" type="button" aria-label="{{ 'cart_drawer.close' | t | default: 'Close cart' | escape }}" data-cart-drawer-close></button>
+  <span class="cart-drawer__backdrop-pointer modal-backdrop-pointer modal-close-button close-icon" aria-hidden="true"></span>
+  <aside class="cart-drawer__panel modal-drag-target" role="dialog" aria-modal="true" aria-labelledby="CartDrawerTitle" tabindex="-1">
+    <div class="quick-view__handle cart-drawer__handle" data-cart-drawer-handle aria-hidden="true"></div>
+    <header class="cart-drawer__header">
+      <h2 id="CartDrawerTitle" class="cart-drawer__title">{{ 'cart_drawer.title' | t | default: 'Cart' | escape }}</h2>
+      <button class="cart-drawer__close modal-close-button close-icon" type="button" aria-label="{{ 'cart_drawer.close' | t | default: 'Close cart' | escape }}" data-cart-drawer-close></button>
+    </header>
+
+    <div class="cart-drawer__body">
+      <p class="cart-drawer__status visually-hidden" data-cart-drawer-status role="status" aria-live="polite" hidden></p>
+      <div class="cart-drawer__loading" data-cart-drawer-loading hidden aria-hidden="true"><span class="cart-drawer__loading-spinner"></span></div>
+      <div class="cart-drawer__items" data-cart-drawer-items></div>
+      <section class="cart-drawer__recommendations" data-cart-drawer-recommendations hidden aria-labelledby="CartDrawerRecommendationsTitle">
+        <div class="cart-drawer__section-heading">
+          <h3 id="CartDrawerRecommendationsTitle">{{ 'cart_drawer.complete_with' | t | default: 'Complete with' | escape }}</h3>
+          <div class="cart-drawer__recommendation-dots" data-cart-drawer-recommendation-dots aria-hidden="true"></div>
+        </div>
+        <div class="cart-drawer__recommendation-list" data-cart-drawer-recommendation-list></div>
+      </section>
+    </div>
+
+    <footer class="cart-drawer__footer" data-cart-drawer-footer hidden>
+      {% if true %}
+        <details class="cart-drawer__note">
+          <summary>{{ 'cart_drawer.order_note' | t | default: 'Add order note' | escape }}</summary>
+          <textarea rows="3" data-cart-drawer-note aria-label="{{ 'cart_drawer.order_note' | t | default: 'Add order note' | escape }}" placeholder="{{ 'cart_drawer.note_placeholder' | t | default: 'Add a note to your order' | escape }}"></textarea>
+          <button type="button" class="cart-drawer__text-button" data-cart-drawer-save-note>{{ 'cart_drawer.save_note' | t | default: 'Save note' | escape }}</button>
+        </details>
+      {% endif %}
+
+      <p class="cart-drawer__tax-note" data-cart-drawer-tax-note>
+        {% if cart.taxes_included %}
+          {{ 'cart.taxes_included' | t }}
+        {% else %}
+          {{ 'cart_drawer.taxes_note' | t | default: 'Taxes and shipping calculated at checkout' | escape }}
+        {% endif %}
+      </p>
+      <ul class="cart-drawer__discounts" data-cart-drawer-discounts role="list" hidden></ul>
+      {% if true %}
+        <form class="cart-drawer__discount" data-cart-drawer-discount>
+          <label class="visually-hidden" for="CartDrawerDiscount">{{ 'cart_drawer.discount_code' | t | default: 'Discount code' | escape }}</label>
+          <input id="CartDrawerDiscount" type="text" name="discount" autocomplete="off" placeholder="{{ 'cart_drawer.discount_code' | t | default: 'Discount code' | escape }}" aria-describedby="CartDrawerMessage">
+          <button type="submit" class="cart-drawer__text-button">{{ 'cart_drawer.apply' | t | default: 'Apply' | escape }}</button>
+        </form>
+      {% endif %}
+      <p id="CartDrawerMessage" class="cart-drawer__message" data-cart-drawer-message role="status" aria-live="polite" hidden></p>
+      <div class="cart-drawer__total"><span>{{ 'cart_drawer.total' | t | default: 'Total' | escape }}</span><strong data-cart-drawer-total></strong></div>
+      <a class="cart-drawer__checkout" href="{{ routes.checkout_url | default: '/checkout' }}" data-cart-drawer-checkout>{{ 'cart_drawer.checkout' | t | default: 'Checkout' | escape }}<span aria-hidden="true"> · </span><span data-cart-drawer-checkout-total></span></a>
+      {% if additional_checkout_buttons %}
+        <div class="cart-drawer__additional-checkout-buttons">
+          {{ content_for_additional_checkout_buttons }}
+        </div>
+      {% endif %}
+      <a class="cart-drawer__view-cart" href="{{ routes.cart_url }}">{{ 'cart_drawer.view_cart' | t | default: 'View cart' | escape }}</a>
+    </footer>
+  </aside>
+</cart-drawer>

@@ -1,0 +1,367 @@
+{% liquid
+  assign announcement_item_count = 0
+  assign announcement_theme_background = blank
+  assign announcement_theme_foreground = blank
+
+  if section.settings.background_mode == 'theme'
+    assign announcement_theme_background = settings.background_color
+    assign announcement_theme_foreground = settings.foreground_color
+  endif
+
+  for block in section.blocks
+    case block.type
+      when 'text_slide'
+        if block.settings.text != blank
+          assign announcement_item_count = announcement_item_count | plus: 1
+        endif
+    endcase
+  endfor
+%}
+
+{% if section.blocks.size > 0 %}
+  <announcement-bar
+    class="announcement-bar color-scheme color-{{ section.settings.color_scheme.id }} full-width"
+    style="--announcement-bar-height: {{ section.settings.height_desktop }}px; --announcement-bar-height-mobile: {{ section.settings.height_mobile }}px; --announcement-bar-background: {% if section.settings.background_mode == 'theme' %}{{ announcement_theme_background }}{% else %}var(--gradient-background, var(--color-background)){% endif %}; --announcement-bar-foreground: {% if section.settings.background_mode == 'theme' %}{{ announcement_theme_foreground }}{% else %}var(--color-text){% endif %};"
+    data-behavior="{% if section.settings.enable_rotation %}rotate{% else %}show_all{% endif %}"
+    data-interval="{{ section.settings.autoplay_interval | times: 1000 }}"
+    data-deferred-module="{{ 'section-announcement-bar.js' | asset_url }}"
+    aria-label="{{ 'announcement_bar.announcement' | t | escape }}"
+  >
+    <div class="announcement-bar__inner{% if section.settings.section_width == 'page' %} announcement-bar__inner--contained{% endif %}">
+      {% if announcement_item_count > 0 %}
+        <div class="announcement-bar__content{% if section.settings.enable_rotation and announcement_item_count > 1 %} announcement-bar__content--with-controls{% endif %}">
+          <div class="announcement-bar__messages" aria-live="polite">
+            {% assign announcement_item_index = 0 %}
+            {% for block in section.blocks %}
+              {% case block.type %}
+                {% when 'text_slide' %}
+                  {% if block.settings.text != blank %}
+                    <div
+                      class="announcement-bar__item spinel-text--{{ block.settings.text_size | default: 'small' }}"
+                      data-announcement-item
+                      data-block-id="{{ block.id }}"
+                      {% if announcement_item_index > 0 and section.settings.enable_rotation %}hidden{% endif %}
+                      {{ block.shopify_attributes }}
+                    >
+                      {{ block.settings.text }}
+                    </div>
+                    {% assign announcement_item_index = announcement_item_index | plus: 1 %}
+                  {% endif %}
+
+              {% endcase %}
+            {% endfor %}
+          </div>
+
+          {% if section.settings.enable_rotation and announcement_item_count > 1 %}
+            <div class="announcement-bar__controls">
+              <nav class="announcement-bar__navigator" aria-label="{{ 'announcement_bar.slide_navigation' | t | escape }}" data-announcement-navigator>
+                <button class="announcement-bar__navigator-arrow" type="button" data-announcement-step="-1" aria-label="{{ 'announcement_bar.previous_slide' | t | escape }}">
+                  <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="m9.5 3-5 5 5 5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/></svg>
+                </button>
+                <button class="announcement-bar__navigator-arrow" type="button" data-announcement-step="1" aria-label="{{ 'announcement_bar.next_slide' | t | escape }}">
+                  <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="m6.5 3 5 5-5 5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/></svg>
+                </button>
+              </nav>
+            </div>
+          {% endif %}
+        </div>
+      {% endif %}
+
+    </div>
+  </announcement-bar>
+{% endif %}
+
+{% stylesheet %}
+  .announcement-bar {
+    position: relative;
+    z-index: 22;
+    display: block;
+    width: 100%;
+    min-height: var(--announcement-bar-height);
+    background: var(--announcement-bar-background);
+    color: var(--announcement-bar-foreground);
+    font-family: var(--font-body--family);
+    font-size: var(--font-caption);
+  }
+
+  .announcement-bar__inner {
+    position: relative;
+    display: grid;
+    min-height: var(--announcement-bar-height);
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    padding-inline: var(--page-margin);
+  }
+
+  .announcement-bar__inner--contained {
+    width: min(100%, var(--page-width));
+    margin-inline: auto;
+  }
+
+  .announcement-bar__content {
+    display: block;
+    min-width: 0;
+    grid-column: 2;
+    grid-row: 1;
+    justify-content: center;
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  .announcement-bar__messages {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 24px;
+    justify-content: center;
+  }
+
+  .announcement-bar__content--with-controls .announcement-bar__messages {
+    box-sizing: border-box;
+    padding-inline: 52px;
+  }
+
+  .announcement-bar[data-behavior='rotate'] .announcement-bar__item[hidden] {
+    display: none;
+  }
+
+  .announcement-bar__item {
+    color: inherit;
+    white-space: nowrap;
+    will-change: opacity, transform;
+  }
+
+  .announcement-bar__item p {
+    display: inline;
+  }
+
+  .announcement-bar__controls {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .announcement-bar__navigator {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    pointer-events: none;
+  }
+
+  .announcement-bar__navigator-arrow {
+    display: grid;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    place-items: center;
+  }
+
+  .announcement-bar__navigator-arrow {
+    width: 26px;
+    height: 26px;
+    color: #fff;
+    opacity: 0.78;
+    pointer-events: auto;
+    transition: opacity 180ms ease, transform 180ms ease;
+  }
+
+  .announcement-bar__navigator-arrow:first-child { grid-column: 1; justify-self: start; margin-left: 24px; }
+  .announcement-bar__navigator-arrow:last-child { grid-column: 3; justify-self: end; margin-right: 24px; }
+
+  .announcement-bar__navigator-arrow:hover {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+
+  .announcement-bar__navigator-arrow svg { width: 16px; height: 16px; }
+
+  .announcement-bar__navigator-arrow:focus-visible {
+    outline: 2px solid currentcolor;
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 749px) {
+    .announcement-bar,
+    .announcement-bar__inner {
+      min-height: var(--announcement-bar-height-mobile);
+    }
+
+    .announcement-bar__inner {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .announcement-bar__content {
+      width: 100%;
+      grid-column: 1;
+      overflow: hidden;
+    }
+
+    .announcement-bar__messages {
+      overflow: hidden;
+    }
+
+    .announcement-bar__content--with-controls .announcement-bar__messages {
+      padding-inline: 36px;
+    }
+
+    .announcement-bar__item {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .announcement-bar__navigator-arrow { width: 24px; height: 24px; }
+    .announcement-bar__navigator-arrow svg { width: 14px; height: 14px; }
+    .announcement-bar__navigator-arrow:first-child { margin-left: 12px; }
+    .announcement-bar__navigator-arrow:last-child { margin-right: 12px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .announcement-bar__navigator-arrow,
+    .announcement-bar__item {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+
+{% schema %}
+{
+  "name": "Announcement bar",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Behavior"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_rotation",
+      "label": "Rotate",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_interval",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "label": "Autoplay interval",
+      "default": 5,
+      "visible_if": "{{ section.settings.enable_rotation }}"
+    },
+    {
+      "type": "range",
+      "id": "height_desktop",
+      "min": 37,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop height",
+      "default": 41
+    },
+    {
+      "type": "range",
+      "id": "height_mobile",
+      "min": 32,
+      "max": 52,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile height",
+      "default": 37
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        {
+          "value": "full",
+          "label": "Full width"
+        },
+        {
+          "value": "page",
+          "label": "Page width"
+        }
+      ],
+      "default": "full"
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "select",
+      "id": "background_mode",
+      "label": "Background",
+      "options": [
+        {
+          "value": "color_scheme",
+          "label": "Color scheme"
+        },
+        {
+          "value": "theme",
+          "label": "Theme background"
+        }
+      ],
+      "default": "color_scheme"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-3"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text_slide",
+      "name": "Text slide",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Text slide"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "Free shipping worldwide on orders over $150 USD"
+        },
+        {
+          "type": "select",
+          "id": "text_size",
+          "label": "Text size",
+          "options": [
+            { "value": "x-large", "label": "X-large" },
+            { "value": "large", "label": "Large" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "small", "label": "Small" },
+            { "value": "x-small", "label": "X-small" }
+          ],
+          "default": "small"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Announcement bar",
+      "category": "Marketing",
+      "blocks": [
+        { "type": "text_slide" }
+      ]
+    }
+  ]
+}
+{% endschema %}

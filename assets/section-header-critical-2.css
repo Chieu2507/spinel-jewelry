@@ -1,0 +1,85 @@
+.header-search-modal {
+    position: fixed;
+    inset: 0 0 auto;
+    width: 100vw;
+    max-width: none;
+    height: min(50dvh, 640px);
+    max-height: 50dvh;
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+    border: 0;
+    background: var(--color-background);
+    color: var(--color-heading);
+  }
+.header-search-modal::backdrop {
+    background: color-mix(in srgb, var(--color-heading) 26%, transparent);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+  }
+.header-search-modal[open] {
+    animation: header-search-modal-in 360ms cubic-bezier(.22, 1, .36, 1) both;
+  }
+.header-search-modal:has(.header-search-modal__predictive:not([hidden])) {
+    height: 90dvh;
+    max-height: 90dvh;
+  }
+.header-search-modal__inner {
+    width: min(100% - (var(--page-margin) * 2), 1011px);
+    min-height: 0;
+    margin-inline: auto;
+    padding: clamp(56px, 6vh, 82px) 0 48px;
+  }
+.header-search-modal__close {
+    position: fixed;
+    z-index: 1;
+    top: 22px;
+    right: 24px;
+  }
+.header-search-modal__navigation {
+    margin-top: 48px;
+  }
+.header-search-modal__navigation ul {
+    display: grid;
+    gap: 17px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+.header-search-modal__navigation a {
+    color: var(--color-heading);
+    font-family: var(--font-body--family);
+    font-size: var(--font-body-small);
+    font-style: var(--font-body--style);
+    font-weight: var(--font-body--weight);
+    letter-spacing: .02em;
+    line-height: 1.25;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+.header-search-modal__navigation a:hover,
+  .header-search-modal__navigation a:focus-visible {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+.header-search-modal__predictive { margin-top: 34px; }
+.header-search-modal__tabs { display: flex; justify-content: center; gap: clamp(28px, 7vw, 116px); }
+.header-search-modal__tabs button { min-width: 114px; padding: 0 0 14px; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; background: transparent; color: color-mix(in srgb, var(--color-text) 72%, transparent); cursor: pointer; font-family: var(--font-body--family); font-size: var(--font-body-base); font-style: var(--font-body--style); font-weight: var(--font-body--weight); }
+.header-search-modal__tabs button[aria-selected="true"] { border-bottom-color: var(--color-heading); color: var(--color-heading); }
+.header-search-modal__panels { padding-top: 52px; }
+.header-search-modal__product-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(14px, 2vw, 28px); }
+.header-search-modal__product { min-width: 0; color: var(--color-heading); text-decoration: none; }
+.header-search-modal__product-image { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; background: var(--color-variant-component-background); }
+.header-search-modal__product-title { display: block; margin-top: 10px; font-family: var(--font-heading--family); font-size: var(--font-body-large); font-style: var(--font-heading--style); font-weight: var(--font-heading--weight); line-height: 1.15; }
+.header-search-modal__product-price { display: block; margin-top: 4px; color: var(--color-text); font-size: var(--font-body-small); }
+.header-search-modal__collection-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(14px, 2vw, 28px); }
+.header-search-modal__collection { min-width: 0; color: var(--color-heading); text-decoration: none; }
+.header-search-modal__collection-image { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; background: var(--color-variant-component-background); }
+.header-search-modal__collection-title { display: block; margin-top: 10px; font-size: var(--font-body-small); font-weight: var(--font-body--weight); text-transform: uppercase; }
+.header-search-modal__collection-count { display: block; margin-top: 4px; color: var(--color-text); font-size: var(--font-caption); text-transform: uppercase; }
+.header-search-modal__empty { margin: 0; color: var(--color-text); text-align: center; }
+.header-search-modal__view-all { display: flex; width: fit-content; min-width: 218px; margin: 28px auto 0; }
+@keyframes header-search-modal-in {
+    from { opacity: 0; transform: translateY(-18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }

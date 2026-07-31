@@ -1,0 +1,29 @@
+{% doc %}
+  Renders a lightweight decorative placeholder from the theme's SVG assets.
+
+  @param {string} class_name - CSS class applied to the placeholder.
+  @param {string} [asset_name] - Theme asset filename for the placeholder artwork.
+  @param {string} [loading] - Native image loading strategy.
+  @param {string} [fetchpriority] - Browser fetch priority.
+  @param {string} [decoding] - Native image decoding strategy.
+
+  @example
+  {% render 'media-placeholder', class_name: 'product-card__placeholder', asset_name: 'placeholder-image-product-1.svg' %}
+{% enddoc %}
+
+{% liquid
+  assign placeholder_asset = asset_name | default: 'placeholder-image-default-1.svg'
+  assign placeholder_loading = loading | default: 'lazy'
+  assign placeholder_decoding = decoding | default: 'async'
+%}
+
+<img
+  src="{{ placeholder_asset | asset_url }}"
+  class="{{ class_name }}"
+  alt=""
+  width="448"
+  height="448"
+  loading="{{ placeholder_loading }}"
+  decoding="{{ placeholder_decoding }}"
+  {% if fetchpriority != blank %}fetchpriority="{{ fetchpriority }}"{% endif %}
+>

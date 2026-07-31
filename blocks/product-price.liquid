@@ -1,0 +1,4 @@
+{% # theme-check-disable ValidScopedCSSClass %}
+{% assign card_product = closest.product | default: product %}
+{% if card_product != blank %}<p class="editorial-hero__product-price" {{ block.shopify_attributes }}>{{ card_product.price | money }}</p>{% endif %}
+{% schema %}{"name":"Product price","settings":[{"type":"select","id":"price_size","label":"Price size","options":[{"value":"small","label":"Small"},{"value":"medium","label":"Medium"},{"value":"large","label":"Large"}],"default":"medium"}],"presets":[{"name":"Product price"}]}{% endschema %}

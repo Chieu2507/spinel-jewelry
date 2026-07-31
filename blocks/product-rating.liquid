@@ -1,0 +1,5 @@
+{% # theme-check-disable ValidScopedCSSClass %}
+{% assign card_product = closest.product | default: product %}
+{% assign rating = card_product.metafields.reviews.rating.value %}
+{% if rating != blank %}<div class="editorial-hero__product-rating" {{ block.shopify_attributes }} aria-label="{{ rating.rating }} out of {{ rating.scale_max }}">★★★★★ <span>{{ rating.rating | round: 1 }}/{{ rating.scale_max }}</span></div>{% elsif block.settings.show_when_empty %}<p class="editorial-hero__product-rating" {{ block.shopify_attributes }}>{{ block.settings.empty_label | escape }}</p>{% endif %}
+{% schema %}{"name":"Product rating","settings":[{"type":"checkbox","id":"show_when_empty","label":"Show when no rating exists","default":false},{"type":"text","id":"empty_label","label":"Empty-state label","default":"No reviews yet"}],"presets":[{"name":"Product rating"}]}{% endschema %}

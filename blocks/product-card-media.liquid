@@ -1,0 +1,36 @@
+{% # theme-check-disable ValidScopedCSSClass %}
+{% liquid
+  assign card_product = closest.product | default: product
+  assign card_image = card_product.featured_image
+%}
+
+<div
+  class="editorial-hero__product-image product-card-media product-card-media--{{ block.settings.aspect_ratio }} product-card-media--border-{{ block.settings.border_style }}"
+  style="--product-media-radius: {{ block.settings.corner_radius }}px; --product-media-padding-top: {{ block.settings.padding_top }}px; --product-media-padding-bottom: {{ block.settings.padding_bottom }}px; --product-media-padding-left: {{ block.settings.padding_left }}px; --product-media-padding-right: {{ block.settings.padding_right }}px;"
+  {{ block.shopify_attributes }}
+>
+  {% if card_image != blank %}
+    {% render 'responsive-image', image: card_image, max_width: 420, widths: '240, 320, 420', sizes: '180px', loading: 'lazy', alt: card_product.title %}
+  {% else %}
+    {% render 'media-placeholder', class_name: 'editorial-hero__product-placeholder', asset_name: 'placeholder-image-default-1.svg' %}
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Product media",
+  "settings": [
+    { "type": "paragraph", "content": "Displays media from parent product" },
+    { "type": "select", "id": "aspect_ratio", "label": "Aspect ratio", "options": [{ "value": "auto", "label": "Auto" }, { "value": "square", "label": "Square" }, { "value": "portrait", "label": "Portrait" }, { "value": "landscape", "label": "Landscape" }], "default": "auto" },
+    { "type": "header", "content": "Borders" },
+    { "type": "select", "id": "border_style", "label": "Style", "options": [{ "value": "none", "label": "None" }, { "value": "solid", "label": "Solid" }], "default": "none" },
+    { "type": "range", "id": "corner_radius", "label": "Corner radius", "min": 0, "max": 32, "step": 1, "unit": "px", "default": 0 },
+    { "type": "header", "content": "Padding" },
+    { "type": "range", "id": "padding_top", "label": "Top", "min": 0, "max": 48, "step": 2, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom", "min": 0, "max": 48, "step": 2, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_left", "label": "Left", "min": 0, "max": 48, "step": 2, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_right", "label": "Right", "min": 0, "max": 48, "step": 2, "unit": "px", "default": 0 }
+  ],
+  "presets": [{ "name": "Product media" }]
+}
+{% endschema %}

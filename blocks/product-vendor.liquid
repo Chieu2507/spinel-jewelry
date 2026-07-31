@@ -1,0 +1,4 @@
+{% # theme-check-disable ValidScopedCSSClass %}
+{% assign card_product = closest.product | default: product %}
+{% if card_product.vendor != blank %}<p class="editorial-hero__product-vendor" {{ block.shopify_attributes }}>{{ card_product.vendor | escape }}</p>{% endif %}
+{% schema %}{"name":"Product vendor","settings":[],"presets":[{"name":"Product vendor"}]}{% endschema %}

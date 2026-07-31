@@ -11,12 +11,92 @@
   "type": "header",
   "name": "t:general.header",
   "sections": {
+    "announcement_bar": {
+      "type": "announcement-bar",
+      "blocks": {
+        "text_slide_zPaNbN": {
+          "type": "text_slide",
+          "settings": {
+            "text": "Cashback 30-day",
+            "text_size": "small"
+          }
+        },
+        "text_slide": {
+          "type": "text_slide",
+          "settings": {
+            "text": "Free shipping worldwide on orders over $150 USD",
+            "text_size": "small"
+          }
+        }
+      },
+      "block_order": [
+        "text_slide_zPaNbN",
+        "text_slide"
+      ],
+      "settings": {
+        "enable_rotation": true,
+        "autoplay_interval": 5,
+        "height_desktop": 41,
+        "height_mobile": 37,
+        "section_width": "full",
+        "color_scheme": "scheme-3"
+      }
+    },
     "header": {
       "type": "header",
-      "settings": {}
+      "blocks": {
+        "collection_mega_menu": {
+          "type": "mega_menu",
+          "settings": {
+            "menu_item": "Collections",
+            "text_size": "small",
+            "column_heading": "",
+            "columns": "3",
+            "promotion_1_image": "shopify://shop_images/home-category-necklaces.webp",
+            "promotion_1_heading": "New Arrivals",
+            "promotion_1_heading_size": "h4",
+            "promotion_1_heading_tag": "h3",
+            "promotion_1_text": "<p>Discover our latest jewelry designs crafted for everyday elegance and timeless style.</p>",
+            "promotion_1_text_size": "medium",
+            "promotion_1_text_alignment": "left",
+            "promotion_1_link_label": "SHOP NEW ARRIVALS",
+            "promotion_1_link": "",
+            "promotion_2_image": "shopify://shop_images/category-earrings.webp",
+            "promotion_2_heading": "Best Sellers",
+            "promotion_2_heading_size": "h4",
+            "promotion_2_heading_tag": "h3",
+            "promotion_2_text": "<p>Explore customer favorites loved for their exceptional craftsmanship and lasting beauty.</p>",
+            "promotion_2_text_size": "medium",
+            "promotion_2_text_alignment": "left",
+            "promotion_2_link_label": "SHOP BEST SELLERS",
+            "promotion_2_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_mega_menu"
+      ],
+      "settings": {
+        "menu": "main-menu",
+        "dropdown_trigger": "click",
+        "underline_active_link": true,
+        "header_layout": "center",
+        "sticky_behavior": "none",
+        "enable_transparent_header": false,
+        "height_desktop": 84,
+        "height_mobile": 60,
+        "show_search": true,
+        "show_localization": true,
+        "show_country_flag": true,
+        "show_account": true,
+        "show_cart": true,
+        "color_scheme": "scheme-1",
+        "transparent_color_scheme": ""
+      }
     }
   },
   "order": [
+    "announcement_bar",
     "header"
-  ],
+  ]
 }

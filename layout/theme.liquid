@@ -1,36 +1,124 @@
 <!doctype html>
-<html lang="{{ request.locale.iso_code }}">
+{% assign is_quick_view_template = false %}
+{% if request.page_type == 'product' and template.suffix == 'quick-view' %}
+  {% assign is_quick_view_template = true %}
+{% endif %}
+<html class="no-js" lang="{{ request.locale.iso_code }}">
   <head>
+    <script>document.documentElement.classList.remove('no-js');</script>
+
+    {% if settings.heading_font.system? == false and settings.heading_font != settings.body_font %}
+      {{ settings.heading_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
+    {% endif %}
+
+    {% unless settings.body_font.system? %}
+      {{ settings.body_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
+    {% endunless %}
+
     {% # Inlined CSS Variables %}
     {% render 'css-variables' %}
 
-    {% comment %}
-      Font preloading:
-      1. Preconnect to font CDN for faster connection
-      2. Preload only the critical font variant (base weight)
-      3. Additional variants load on-demand via @font-face
-    {% endcomment %}
-    {% unless settings.type_primary_font.system? %}
-      <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
-
-      {% comment %} Preload the base font variant for initial page render {% endcomment %}
-      {{ settings.type_primary_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
-    {% endunless %}
-
-    {% # Load and preload the critical CSS %}
-    {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
-
+    {{ 'base.css' | asset_url | stylesheet_tag: preload: true }}
+    {{ 'modal.css' | asset_url | stylesheet_tag }}
+    {% if request.page_type == 'index' and request.design_mode == false %}
+      <link rel="stylesheet" href="{{ 'section-header-critical-2.css' | asset_url }}" media="print" onload="this.media='all'">
+    {% endif %}
+    {% if settings.cart_action == 'drawer' %}
+      {{ 'cart-drawer.css' | asset_url | stylesheet_tag }}
+    {% endif %}
+    {% if request.page_type == 'collection' and request.design_mode == false %}
+      <style>{{ 'section-collection-critical.css' | inline_asset_content }}</style>
+    {% endif %}
     {% # Social, title, etc. %}
     {% render 'meta-tags' %}
 
+    {% if settings.favicon != blank %}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    {% else %}
+      <link rel="icon" type="image/png" href="{{ 'spinel-favicon.png' | asset_url }}">
+    {% endif %}
+
     {{ content_for_header }}
+    <script>
+      window.theme = window.theme || {};
+      window.theme.strings = {
+        ...(window.theme.strings || {}),
+        addToCartError: {{ 'product.add_to_cart_error' | t | json }},
+        quickViewError: {{ 'product_card.quick_view_error' | t | json }},
+        quickViewRetry: {{ 'product_card.quick_view_retry' | t | json }}
+      };
+    </script>
+    <script src="{{ 'section-color-scheme.js' | asset_url }}" defer></script>
+    <script src="{{ 'scroll-lock.js' | asset_url }}" defer></script>
+    {% if settings.enable_motion and settings.enable_smooth_scroll and is_quick_view_template == false %}
+      <script src="{{ 'smooth-scroll.js' | asset_url }}" defer></script>
+    {% endif %}
+    <script src="{{ 'modal-backdrop.js' | asset_url }}" defer></script>
+    <script src="{{ 'deferred-module-loader.js' | asset_url }}" defer></script>
+    {% if request.page_type == 'index' %}
+      <script src="{{ 'section-stylesheet-loader.js' | asset_url }}" defer></script>
+    {% endif %}
+    <script
+      src="{{ 'product-card-loader.js' | asset_url }}"
+      data-product-card-module="{{ 'product-card.js' | asset_url }}"
+      data-cart-feedback-module="{{ 'cart-feedback.js' | asset_url }}"
+      defer
+    ></script>
   </head>
 
-  <body>
-    {% sections 'header-group' %}
+  <body class="template-{{ request.page_type | handle }}{% if is_quick_view_template %} template-quick-view{% endif %}{% if request.design_mode %} shopify-design-mode{% endif %}">
+    {% unless is_quick_view_template %}
+      <a class="skip-link" href="#MainContent">{{ 'accessibility.skip_to_content' | t }}</a>
+      {% sections 'header-group' %}
+    {% endunless %}
 
-    {{ content_for_layout }}
+    {% if is_quick_view_template %}
+      {{ content_for_layout }}
+    {% else %}
+      <main id="MainContent" role="main" tabindex="-1">
+        {{ content_for_layout }}
+      </main>
+    {% endif %}
 
-    {% sections 'footer-group' %}
+    {% unless is_quick_view_template %}
+      <dialog
+        class="quick-view-modal modal-drag-target"
+        scroll-lock
+        data-quick-view-modal
+        data-product-page-module="{{ 'product-page.js' | asset_url }}"
+        aria-label="{{ 'product_card.quick_view' | t | escape }}"
+      >
+        <span class="quick-view-modal__backdrop-pointer modal-close-button close-icon" aria-hidden="true"></span>
+        <div data-quick-view-modal-content></div>
+      </dialog>
+
+      {% sections 'footer-group' %}
+      {% if settings.cart_action == 'drawer' %}
+        {% render 'cart-drawer' %}
+        <script
+          src="{{ 'cart-drawer-loader.js' | asset_url }}"
+          data-cart-drawer-module="{{ 'cart-drawer.js' | asset_url }}"
+          defer
+        ></script>
+      {% endif %}
+
+      <button
+        class="back-to-top"
+        type="button"
+        data-back-to-top
+        aria-label="{{ 'back_to_top.label' | t | escape }}"
+        aria-hidden="true"
+        tabindex="-1"
+      >
+        <svg class="back-to-top__progress" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+          <circle class="back-to-top__progress-track" cx="24" cy="24" r="21" pathLength="100"></circle>
+          <circle class="back-to-top__progress-value" cx="24" cy="24" r="21" pathLength="100"></circle>
+        </svg>
+        <svg class="back-to-top__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="m6 14 6-6 6 6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+        </svg>
+      </button>
+      <script src="{{ 'back-to-top.js' | asset_url }}" defer></script>
+    {% endunless %}
   </body>
 </html>

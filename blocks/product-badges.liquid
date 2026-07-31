@@ -1,0 +1,4 @@
+{% # theme-check-disable ValidScopedCSSClass %}
+{% assign card_product = closest.product | default: product %}
+{% if card_product != blank %}<div class="editorial-hero__product-badges" {{ block.shopify_attributes }}>{% unless card_product.available %}<span>Sold out</span>{% endunless %}{% if card_product.compare_at_price > card_product.price %}<span>Sale</span>{% endif %}</div>{% endif %}
+{% schema %}{"name":"Product badges","settings":[],"presets":[{"name":"Product badges"}]}{% endschema %}

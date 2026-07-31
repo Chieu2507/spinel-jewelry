@@ -10,8 +10,26 @@
 {
   "sections": {
     "main": {
-      "type": "hello-world",
-      "settings": {}
+      "type": "editorial-hero",
+      "settings": {
+        "image": "shopify://shop_images/slideshow_1_de.webp",
+        "mobile_image": "shopify://shop_images/slideshow_1_mb.webp"
+      },
+      "blocks": {
+        "hero_eyebrow": { "type": "editorial-eyebrow", "settings": {} },
+        "hero_heading": { "type": "editorial-heading", "settings": {} },
+        "hero_spacer_heading": { "type": "spacer", "settings": { "height_desktop": 160, "height_mobile": 14, "unit": "px" } },
+        "hero_text": { "type": "editorial-text", "settings": {} },
+        "hero_spacer_text": { "type": "spacer", "settings": { "height_desktop": 180, "height_mobile": 18, "unit": "px" } },
+        "hero_spacer_button": { "type": "spacer", "settings": { "height_desktop": 36, "height_mobile": 0, "unit": "px" } },
+        "hero_button": { "type": "editorial-button", "settings": {} },
+        "hero_seal": { "type": "editorial-seal", "settings": {} },
+        "hero_product": { "type": "product-card", "settings": {} }
+      },
+      "block_order": [
+        "hero_eyebrow", "hero_spacer_heading", "hero_heading", "hero_spacer_text", "hero_text",
+        "hero_spacer_button", "hero_button", "hero_seal", "hero_product"
+      ]
     }
   },
   "order": [
