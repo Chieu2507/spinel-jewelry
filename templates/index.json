@@ -11,25 +11,149 @@
   "sections": {
     "main": {
       "type": "editorial-hero",
-      "settings": {
-        "image": "shopify://shop_images/slideshow_1_de.webp",
-        "mobile_image": "shopify://shop_images/slideshow_1_mb.webp"
-      },
       "blocks": {
-        "hero_eyebrow": { "type": "editorial-eyebrow", "settings": {} },
-        "hero_heading": { "type": "editorial-heading", "settings": {} },
-        "hero_spacer_heading": { "type": "spacer", "settings": { "height_desktop": 160, "height_mobile": 14, "unit": "px" } },
-        "hero_text": { "type": "editorial-text", "settings": {} },
-        "hero_spacer_text": { "type": "spacer", "settings": { "height_desktop": 180, "height_mobile": 18, "unit": "px" } },
-        "hero_spacer_button": { "type": "spacer", "settings": { "height_desktop": 36, "height_mobile": 0, "unit": "px" } },
-        "hero_button": { "type": "editorial-button", "settings": {} },
-        "hero_seal": { "type": "editorial-seal", "settings": {} },
-        "hero_product": { "type": "product-card", "settings": {} }
+        "hero_eyebrow": {
+          "type": "editorial-eyebrow",
+          "settings": {
+            "text": "THE PERSONAL ARCHIVE · 2026"
+          },
+          "blocks": {}
+        },
+        "hero_spacer_heading": {
+          "type": "spacer",
+          "settings": {
+            "height_desktop": 160,
+            "height_mobile": 14,
+            "unit": "px"
+          },
+          "blocks": {}
+        },
+        "hero_heading": {
+          "type": "editorial-heading",
+          "settings": {
+            "heading": "Jewelry, chosen like it <em>matters.</em>",
+            "heading_size": "h1",
+            "heading_tag": "h1",
+            "alignment": "left"
+          },
+          "blocks": {}
+        },
+        "hero_spacer_text": {
+          "type": "spacer",
+          "settings": {
+            "height_desktop": 180,
+            "height_mobile": 18,
+            "unit": "px"
+          },
+          "blocks": {}
+        },
+        "hero_text": {
+          "type": "editorial-text",
+          "settings": {
+            "text": "<p>Begin with the person, the moment or the meaning. Spinel turns finding a piece into a considered, intimate decision.</p>",
+            "text_size": "small"
+          },
+          "blocks": {}
+        },
+        "hero_spacer_button": {
+          "type": "spacer",
+          "settings": {
+            "height_desktop": 36,
+            "height_mobile": 0,
+            "unit": "px"
+          },
+          "blocks": {}
+        },
+        "hero_button": {
+          "type": "editorial-button",
+          "settings": {
+            "label": "Begin your selection",
+            "link": "{{ closest.product.url }}"
+          },
+          "blocks": {}
+        },
+        "hero_seal": {
+          "type": "editorial-seal",
+          "settings": {
+            "image": "shopify://shop_images/PDP_2000x2500_SP26_ClassicEasyToteV2_Cappuccino_8092.jpg",
+            "size_desktop": 160,
+            "size_mobile": 68,
+            "enable_rotation": true,
+            "rotation_direction": "clockwise",
+            "rotation_duration": 18
+          },
+          "blocks": {}
+        },
+        "hero_product": {
+          "type": "product-card",
+          "settings": {
+            "vertical_gap": 4,
+            "background_color": "",
+            "border_style": "none",
+            "corner_radius": 0,
+            "padding_top": 18,
+            "padding_bottom": 18,
+            "padding_left": 18,
+            "padding_right": 18
+          },
+          "blocks": {
+            "product_card_media_b4rNqF": {
+              "type": "product-card-media",
+              "name": "Product media",
+              "settings": {
+                "aspect_ratio": "auto",
+                "border_style": "none",
+                "corner_radius": 0,
+                "padding_top": 0,
+                "padding_bottom": 0,
+                "padding_left": 0,
+                "padding_right": 0
+              },
+              "blocks": {}
+            },
+            "product_vendor_z8RgyN": {
+              "type": "product-vendor",
+              "name": "Product vendor",
+              "settings": {},
+              "blocks": {}
+            },
+            "product_title_jfVtkm": {
+              "type": "product-title",
+              "name": "Product title",
+              "settings": {
+                "heading_size": "h5",
+                "html_tag": "h3"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "product_card_media_b4rNqF",
+            "product_vendor_z8RgyN",
+            "product_title_jfVtkm"
+          ]
+        }
       },
       "block_order": [
-        "hero_eyebrow", "hero_spacer_heading", "hero_heading", "hero_spacer_text", "hero_text",
-        "hero_spacer_button", "hero_button", "hero_seal", "hero_product"
-      ]
+        "hero_eyebrow",
+        "hero_spacer_heading",
+        "hero_heading",
+        "hero_spacer_text",
+        "hero_text",
+        "hero_spacer_button",
+        "hero_button",
+        "hero_seal",
+        "hero_product"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/PDP_2000x2500_SU26_POF2805.jpg",
+        "image_alt": "Jewelry editorial portrait",
+        "product": "cuyana-demo-east-west-easy-tote",
+        "section_width": "full",
+        "desktop_media_size": "adapt",
+        "mobile_media_size": "adapt",
+        "color_scheme": ""
+      }
     }
   },
   "order": [
