@@ -2,14 +2,18 @@
   assign card_product = closest.product | default: product
 %}
 
-<article
-  class="editorial-hero__product editorial-hero__product--border-{{ block.settings.border_style }}"
-  data-product-card
-  style="--product-card-gap: {{ block.settings.vertical_gap }}px; --product-card-background: {{ block.settings.background_color | default: 'rgb(255 255 255 / 92%)' }}; --product-card-radius: {{ block.settings.corner_radius }}px; --product-card-padding-top: {{ block.settings.padding_top }}px; --product-card-padding-bottom: {{ block.settings.padding_bottom }}px; --product-card-padding-left: {{ block.settings.padding_left }}px; --product-card-padding-right: {{ block.settings.padding_right }}px;"
-  {{ block.shopify_attributes }}
->
-  {% content_for 'blocks', closest.product: card_product %}
-</article>
+<div class="editorial-hero__product-disclosure" data-product-card {{ block.shopify_attributes }}>
+  <button class="editorial-hero__product-trigger" type="button" aria-label="View featured product" aria-expanded="false" data-product-toggle>
+    <span class="editorial-hero__product-trigger-icon editorial-hero__product-trigger-icon--open">{% render 'icon', name: 'bag' %}</span>
+    <span class="editorial-hero__product-trigger-icon editorial-hero__product-trigger-icon--close">{% render 'icon', name: 'close' %}</span>
+  </button>
+  <article
+    class="editorial-hero__product editorial-hero__product--border-{{ block.settings.border_style }}"
+    style="--product-card-gap: {{ block.settings.vertical_gap }}px; --product-card-background: {{ block.settings.background_color | default: 'rgb(255 255 255 / 92%)' }}; --product-card-radius: {{ block.settings.corner_radius }}px; --product-card-padding-top: {{ block.settings.padding_top }}px; --product-card-padding-bottom: {{ block.settings.padding_bottom }}px; --product-card-padding-left: {{ block.settings.padding_left }}px; --product-card-padding-right: {{ block.settings.padding_right }}px;"
+  >
+    {% content_for 'blocks', closest.product: card_product %}
+  </article>
+</div>
 
 {% schema %}
 {
