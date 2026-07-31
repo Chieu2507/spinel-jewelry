@@ -59,7 +59,7 @@
           "type": "spacer",
           "settings": {
             "height_desktop": 36,
-            "height_mobile": 0,
+            "height_mobile": 32,
             "unit": "px"
           },
           "blocks": {}
